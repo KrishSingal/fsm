@@ -516,6 +516,7 @@ function updateFiringMode() {
 	let setFire = document.getElementById('setFire');
 	let qReduce = document.getElementById('qReduce');
 	let gonality = document.getElementById('gonality');
+    let fast_gonality = document.getElementById('fast_gonality');
 	if (dhars.checked) {
 		coinfiringMode = 'dhars';
 		selectedObject = null;
@@ -531,7 +532,10 @@ function updateFiringMode() {
 	} else if (gonality.checked) {
 		coinfiringMode = 'gonality';
 		selectedObject = null;
-	} else {
+	} else if(fast_gonality.checked) {
+        coinfiringMode = 'fast_gonality';
+        selectedObject = null;
+    }  else {
 		coinfiringMode = 'firing';
 		document.getElementById('firing').checked = true;
 		selectedObject = null;
@@ -915,7 +919,9 @@ window.onload = function() {
 	document.getElementById('gonality').onclick = () => {		
 		gonality(nodes[0]);
 	}
-
+    document.getElementById('fast_gonality').onclick = () => {		
+		fast_gonality();
+	}
 	document.getElementById('rank').onclick = () => {		
 		rank();
 	}

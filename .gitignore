@@ -1,1 +1,6 @@
 www/fsm.js
+.DS_Store
+.firebase/
+.firebaserc
+firebase.json
+src/.DS_Store
