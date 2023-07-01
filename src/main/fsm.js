@@ -920,7 +920,13 @@ window.onload = function() {
 		gonality(nodes[0]);
 	}
     document.getElementById('fast_gonality').onclick = () => {		
-		fast_gonality();
+		let order = prompt("Gonality Order")
+        if(order < 1){
+            alert('Invalid Gonality Order')
+        }
+        else{
+            fast_gonality(order);
+        }
 	}
 	document.getElementById('rank').onclick = () => {		
 		rank();
@@ -993,6 +999,10 @@ window.onload = function() {
 
 	document.getElementById('drawRalphsFav').onclick = () => {
 		drawRalphsFav(4)
+	}
+
+    document.getElementById('UniformSubdivide').onclick = () => {
+		uniformlySubdivide()
 	}
 
 	document.getElementById('addTab').onclick = () => {

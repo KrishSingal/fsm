@@ -13,8 +13,6 @@ Runs one iteration of Dhar's burning algorithm to compute a legal firing set
 v: integer label of target vertex of q-reduction
 divisor: map from V \to Z
 */
-
-
 function burn(v, divisor){
     const graph = makeAdjList()
 
@@ -70,11 +68,131 @@ function burn(v, divisor){
     return legal_firing_set
 }
 
-function lowerBound(){
-    return 1
+/*
+Checks whether graph is simple
+*/
+function simple_graph(){
+    const graph = makeAdjList()
+
+    for(let u = 0; u < nodes.length; u++){
+        for(let v = 0; v < graph[u].length; v++){
+            if(graph[u].indexOf(graph[u][v]) != graph[u].lastIndexOf(graph[u][v])){
+                return false
+            }
+        }
+    }
+    return true
 }
 
-function check_positive_rank(divisor){
+/*
+Implementation of Edmond-Karp Max-Flow algorithm
+*/
+function edmond_karp(src, sink){
+    const graph = makeAdjList()
+    
+    let max_flow = 0
+
+    let limiting_flow = []
+    let parent = []
+    let residual_capacity = []
+
+    for(let i = 0; i<nodes.length; i++){
+        parent.push(-1)
+        residual_capacity.push([])
+        for(let j =0; j < nodes.length; j++){
+            residual_capacity[i].push(0)
+        }
+    }
+
+    for(let u = 0; u<nodes.length; u++){
+        graph[u].forEach(v => {
+            residual_capacity[u][v]++
+        })
+    }
+
+    function bfs(){
+        let q = []
+        let visited = new Set()
+
+        for(let i = 0; i<nodes.length; i++){
+            limiting_flow[i] = nodes.length // double check this
+        }
+
+        q.push(src)
+        visited.add(src)
+        while(q.length != 0){
+            let u = q.pop()
+            
+            for(let v = 0; v < nodes.length; v++){
+                if(!visited.has(v) && residual_capacity[u][v] != 0){
+                    limiting_flow[v] = Math.min(limiting_flow[v], residual_capacity[u][v])
+                    parent[v] = u
+                    visited.add(v)
+                    q.push(v)
+                    if(v == sink){
+                        return 1
+                    }
+                }
+            }
+        }
+
+        return 0
+    }
+
+
+    while(bfs()){
+        max_flow += limiting_flow[sink]
+
+        let v = sink
+        let u = -1
+        while(v != src){
+            u = parent[v]
+            residual_capacity[u][v] -= limiting_flow[sink]
+            residual_capacity[v][u] += limiting_flow[sink]
+            v = u
+        }
+    }
+
+    return max_flow
+}
+
+
+/*
+Computes lowerbound on rth-gonality
+For simple graphs, delta(G) ≤ gon(G)
+In general, min(n, lambda(G)) ≤ gon(G)
+*/
+function gonalityLowerBound(){
+    const graph = makeAdjList()
+    // console.log('simple_graph() = ', simple_graph())
+    if(simple_graph()){
+        let min_degree = nodes.length
+
+        for(let u =0; u<nodes.length; u++){
+            min_degree = Math.min(min_degree, graph[u].length)
+        }
+
+        console.log('Simple Graph Lower Bound: ', min_degree)
+        return min_degree
+    }
+    else{ // edmond-karp's
+        let lambda = links.length
+        for(let u=0; u< nodes.length; u++){
+            for(let v = u+1; v < nodes.length; v++){
+                lambda = Math.min(lambda, edmond_karp(u,v))
+            }
+        }
+
+        console.log('Multi-graph Lower Bound: ', Math.min(nodes.length, lambda))
+
+        return Math.min(nodes.length, lambda)
+    }
+}
+
+/*
+Checks whether rank(divisor) ≥ order
+*/
+function check_rank(divisor, order){
     // console.log("Checking Rank of: ", divisor)
     
     const graph = makeAdjList()
@@ -83,7 +201,7 @@ function check_positive_rank(divisor){
 
     for(let i = 0; i < nodes.length; i++){
         running_divisor[i] = divisor[i]
-        dp[i] = divisor[i] > 0 ? 1 : 0
+        dp[i] = divisor[i] >= order ? 1 : 0
     }
 
     for(let i = 0; i < nodes.length; i++){
@@ -109,7 +227,7 @@ function check_positive_rank(divisor){
             }*/
 
             for(let i = 0; i < nodes.length; i++){
-                if(running_divisor[i] > 0){
+                if(running_divisor[i] >= order){
                     dp[i] = 1
                 }
             }
@@ -119,23 +237,26 @@ function check_positive_rank(divisor){
     return true
 }
 
-function find_winner(chips, divisor_length){
+/*
+Finds r-gonality winning divisor with degree = chips if one exists
+*/
+function find_winner(chips, divisor_length, order){
     // console.log('chips: ' + chips + ' divisor_length: ' + divisor_length)
     if(divisor_length >= nodes.length){
-        let b = burn(0, winning_divisor)
-        let pr = check_positive_rank(winning_divisor)
+        // let b = burn(0, winning_divisor)
+        // let pr = check_positive_rank(winning_divisor)
         
         // console.log('chips: ' + chips + ' winning_divisor: ' + winning_divisor)
         // console.log("burn? ", b.size)
         // console.log("positive rank? ", pr)
 
-        return chips == 0 && winning_divisor[0] > 0 && burn(0, winning_divisor).size == 0 && check_positive_rank(winning_divisor) 
+        return chips == 0 && winning_divisor[0] > 0 && burn(0, winning_divisor).size == 0 && check_rank(winning_divisor, order) 
     }
     
     let stop = divisor_length == 0 ? 1 : 0
     for(let i = chips; i >= stop; i--){
         winning_divisor[divisor_length] = i
-        if(find_winner(chips - i, divisor_length+1)){
+        if(find_winner(chips - i, divisor_length+1, order)){
             return true
         }
     }
@@ -143,13 +264,10 @@ function find_winner(chips, divisor_length){
     return false
 }
 
-function fast_gonality(){
-    const graph = makeAdjList()
-    
-    for(let i = 0; i < nodes.length; i++){
-        // console.log(graph[i])
-    }
-
+/*
+Driver function for optimized gonality computation
+*/
+function fast_gonality(order){
     let gonDegree = nodes.length
 
     // console.log('checkpoint 1')
@@ -160,8 +278,10 @@ function fast_gonality(){
 
     // console.log('checkpoint 2')
 
-    for(let i = 1; i<=nodes.length; i++){
-        if(find_winner(i, 0)){
+
+    // try divisors with every degree starting from 1
+    for(let i = gonalityLowerBound(); true; i++){
+        if(find_winner(i, 0, order)){
             gonDegree = i
             break
         }
@@ -173,6 +293,8 @@ function fast_gonality(){
         nodes[node]['text'] = `${winning_divisor[node.label-1]}`;
     })*/
 
+
+    // update the visuals
     for (node in nodes) {
         nodes[node]['text'] = `${winning_divisor[node]}`;
     }

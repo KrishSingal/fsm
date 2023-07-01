@@ -153,7 +153,19 @@ if (typeof btoa == 'undefined') {
 }
 
 	</script>
-</head><body>
+</head>
+
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-BVZRY3SVLG"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-BVZRY3SVLG');
+</script>
+
+<body>
 	<h1>Chip Firing Interface</h1>
     <div class="center" style="margin-bottom: 5px;">
 		<input type="checkbox" id="directed"> Directed Edges
@@ -182,6 +194,7 @@ if (typeof btoa == 'undefined') {
 			<button id="drawComplete" class= "button" style="margin-top: 5px; margin-left: 2px; margin-right: 2px"> Draw Complete Graph
 			<button id="drawCompleteBipartite" class= "button" style="margin-top: 5px; margin-left: 2px; margin-right: 2px"> Draw Complete Bipartite Graph
 			<button id="drawRalphsFav" class= "button" style="margin-top: 5px; margin-left: 2px; margin-right: 2px"> Draw Ralph's Favorite Graph
+            <button id="UniformSubdivide" class= "button" style="margin-top: 5px; margin-left: 2px; margin-right: 2px"> Uniformly Subdivide
 		</div>
 		<div class="center" style="margin-top: 5px; margin-bottom: 0px;">
 			<button id="clearNodes" class= "button" style="margin-top: 5px; margin-left: 2px; margin-right: 2px">Clear All Nodes</button>
@@ -247,6 +260,7 @@ if (typeof btoa == 'undefined') {
 			<li><b>Record Firing Script:</b> When this box is checked, the firing/borrowing moves that you perform are recorded. The script is automatically cleared and then recorded when you choose to q-reduce on a vertex or run the greedy algorithm.</li>
 			<li><b>Greedy Algorithm:</b> Click to run the Greedy algorithm to determine if your divisor is winnable. This attempts to borrow from every vertex and if a winnable divisor is reached first, that is returned, otherwise it signals that the divisor is unwinnable. The firing script is automatically cleared and then recorded when you choose to run the greedy algorithm.</li>
 			<li><b>Gonality:</b> Click to determine the Gonality of the given graph. Will play the Gonality Game on all possible divisors of degree 1, then degree 2, and so until either the Gonality is determined or the program hits divisors with degree equal to the number of vertices in the graph. Does not preserve current node values.  *WARNING: May take a very long time on large graphs.*</li>
+            <li><b>Fast Gonality:</b> Click to determine the rth-Gonality of the given graph. Optimized version of 'Gonality' function. </li>
 			<li><b>Rank:</b> Click to determine the rank of the given divisor. This attempts to subtract every possible divisor of degree 1, then degree 2, and so on until it fails. At this point the rank is returned as the previous degree. *WARNING: May take a very long time on large graphs.*</li>
 			<li><b>Genus:</b> Click to determine the genus of the given graph. This calculates the number of edges minus the number of vertices plus 1.</li>
 		</ul>
@@ -254,7 +268,8 @@ if (typeof btoa == 'undefined') {
 	</div>
 		<p>Based on the FSM machine <a href="http://sa.muel.green/fsm/">here</a> and <a href="http://madebyevan.com/fsm/">here</a>.
 	
-	<p>Update by <a href="https://williams.edu">Heidi Leeds, Isaac Weissman, Isabel Albores, Nick Hollon </a> in 2021</p>		
+    <p>Update by <a href="https://krishsingal.github.io"> Krish Singal </a> in 2023 </p>
+    <p>Update by <a href="https://williams.edu">Heidi Leeds, Isaac Weissman, Isabel Albores, Nick Hollon </a> in 2021</p>		
 	<p>Update by <a href="https://markusfeng.com">Markus Feng</a> in 2019</p>
 	<p>Update by <a href="http://samuelgreen.org/">Samuel Green</a> in 2015</p>
 	<p>Original by <a href="http://madebyevan.com/">Evan Wallace</a> in 2010</p>
