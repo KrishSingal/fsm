@@ -189,10 +189,29 @@ function gonalityLowerBound(){
     }
 }
 
-/*
-Checks whether rank(divisor) ≥ order
-*/
 function check_rank(divisor, order){
+    
+    if(order == 1){
+        return check_positive_rank(divisor)
+    }
+
+    for(let i = 0; i < nodes.length; i++){
+        temp_divisor = [...divisor]
+        temp_divisor[i]--
+
+        if(!check_rank(temp_divisor, order-1)){
+            return false
+        }
+    }
+
+    return true
+}
+
+
+/*
+Checks whether rank(divisor) ≥ 0
+*/
+function check_positive_rank(divisor){
     // console.log("Checking Rank of: ", divisor)
     
     const graph = makeAdjList()
@@ -201,7 +220,7 @@ function check_rank(divisor, order){
 
     for(let i = 0; i < nodes.length; i++){
         running_divisor[i] = divisor[i]
-        dp[i] = divisor[i] >= order ? 1 : 0
+        dp[i] = divisor[i] > 0 ? 1 : 0
     }
 
     for(let i = 0; i < nodes.length; i++){
@@ -227,7 +246,7 @@ function check_rank(divisor, order){
             }*/
 
             for(let i = 0; i < nodes.length; i++){
-                if(running_divisor[i] >= order){
+                if(running_divisor[i] > 0){
                     dp[i] = 1
                 }
             }
@@ -250,7 +269,13 @@ function find_winner(chips, divisor_length, order){
         // console.log("burn? ", b.size)
         // console.log("positive rank? ", pr)
 
-        return chips == 0 && winning_divisor[0] > 0 && burn(0, winning_divisor).size == 0 && check_rank(winning_divisor, order) 
+
+        if(order == 1){
+            return chips == 0 && winning_divisor[0] > 0 && burn(0, winning_divisor).size == 0 && check_positive_rank(winning_divisor) 
+        }
+        else{
+            return chips == 0 && winning_divisor[0] > 0 && burn(0, winning_divisor).size == 0 && check_rank(winning_divisor, order) 
+        }
     }
     
     let stop = divisor_length == 0 ? 1 : 0
@@ -299,7 +324,8 @@ function fast_gonality(order){
         nodes[node]['text'] = `${winning_divisor[node]}`;
     }
 
-    alert(`Gonality of this graph: ${gonDegree}`)
+    alert(`Order ${order} Gonality of this graph: ${gonDegree}`)
+    
     resetScript()
     draw();
 }

@@ -920,12 +920,14 @@ window.onload = function() {
 		gonality(nodes[0]);
 	}
     document.getElementById('fast_gonality').onclick = () => {		
-		let order = prompt("Gonality Order")
+        let order = prompt("Gonality Order")
         if(order < 1){
             alert('Invalid Gonality Order')
         }
         else{
+            alert('Computing Fast Gonality...')
             fast_gonality(order);
+            
         }
 	}
 	document.getElementById('rank').onclick = () => {		
