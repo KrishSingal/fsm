@@ -1011,11 +1011,6 @@ window.onload = function() {
 	document.getElementById('drawRalphsFav').onclick = () => {
 		drawRalphsFav(4)
 	}
-
-    document.getElementById('UniformSubdivide').onclick = () => {
-		uniformlySubdivide()
-	}
-
 	document.getElementById('addTab').onclick = () => {
 		addTab()
 	}
