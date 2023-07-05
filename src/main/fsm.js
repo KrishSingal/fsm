@@ -925,8 +925,18 @@ window.onload = function() {
             alert('Invalid Gonality Order')
         }
         else{
-            alert(`Computing Order ${order} Fast Gonality...`)
+            // alert(`Computing Order ${order} Fast Gonality...`)
             fast_gonality(order);
+        }
+	}
+    document.getElementById('mfgon').onclick = () => {		
+        let order = prompt("Multiplicity Free Gonality Order")
+        if(order < 1){
+            alert('Invalid Gonality Order')
+        }
+        else{
+            // alert(`Computing Order ${order} Fast Gonality...`)
+            mfgon(order);
         }
 	}
 	document.getElementById('rank').onclick = () => {		
