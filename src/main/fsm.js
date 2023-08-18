@@ -516,7 +516,7 @@ function updateFiringMode() {
 	let setFire = document.getElementById('setFire');
 	let qReduce = document.getElementById('qReduce');
 	let gonality = document.getElementById('gonality');
-    let fast_gonality = document.getElementById('fast_gonality');
+    // let fast_gonality = document.getElementById('fast_gonality');
 	if (dhars.checked) {
 		coinfiringMode = 'dhars';
 		selectedObject = null;
@@ -532,10 +532,10 @@ function updateFiringMode() {
 	} else if (gonality.checked) {
 		coinfiringMode = 'gonality';
 		selectedObject = null;
-	} else if(fast_gonality.checked) {
+	} /* else if(fast_gonality.checked) {
         coinfiringMode = 'fast_gonality';
         selectedObject = null;
-    }  else {
+    } */ else {
 		coinfiringMode = 'firing';
 		document.getElementById('firing').checked = true;
 		selectedObject = null;
@@ -916,7 +916,7 @@ window.onload = function() {
 
 		draw();
 	}
-	document.getElementById('gonality').onclick = () => {		
+	/*document.getElementById('gonality').onclick = () => {		
 		gonality(nodes[0]);
 	}
     document.getElementById('fast_gonality').onclick = () => {		
@@ -926,6 +926,16 @@ window.onload = function() {
         }
         else{
             // alert(`Computing Order ${order} Fast Gonality...`)
+            fast_gonality(order);
+        }
+	}*/
+    document.getElementById('gonality').onclick = () => {		
+        let order = prompt("Gonality Order")
+        if(order < 1){
+            alert('Invalid Gonality Order')
+        }
+        else{
+            // alert(`Computing Order ${order} Gonality...`)
             fast_gonality(order);
         }
 	}
@@ -939,10 +949,12 @@ window.onload = function() {
             mfgon(order);
         }
 	}
-	document.getElementById('rank').onclick = () => {		
+	/*document.getElementById('rank').onclick = () => {		
 		rank();
+	}*/
+    document.getElementById('rank').onclick = () => {		
+		fast_rank();
 	}
-
 	document.getElementById('genus').onclick = () => {		
 		genus();
 	}
