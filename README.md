@@ -1,5 +1,7 @@
 # Graph / Finite State Machine Designer
 
+Update by [Krish Singa'](https://krishsingal.github.io) in 2023.
+
 Update by Heidi Leeds, Isaac Weissman, Isabel Albores, and Nick Hollon in 2021. 
 
 Update by [Markus Feng](https://markusfeng.com) in 2019.
